@@ -1,0 +1,19 @@
+package com.studioprintf.pojo.message.request;
+
+
+
+/**
+ * Created by lucifer on 17-4-25.
+ */
+public class TextMessage extends BaseMessage {
+
+    private String content;  //文本消息内容
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+}
