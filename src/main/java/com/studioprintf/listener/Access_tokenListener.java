@@ -1,6 +1,7 @@
 package com.studioprintf.listener;
 
 import com.studioprintf.pojo.Access_token;
+import com.studioprintf.pojo.Jsapi_ticket;
 import com.studioprintf.pojo.menu.Button;
 import com.studioprintf.pojo.menu.CommonButton;
 import com.studioprintf.pojo.menu.ComplexButton;
@@ -25,14 +26,16 @@ public class Access_tokenListener implements ServletContextListener {
 
         Access_token access_token = getAccess_token(requestManager);
         context.setAttribute("access_token",access_token);
+        context.setAttribute("jsapi_ticket",getJsapi_ticket(requestManager,access_token));
         requestManager.createMenu(access_token,getMenu());
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                Access_token access_token = requestManager.getAccess_token("wx85b51ac5e678f28a","2b13a902f81458f93611d00cdaf37aae");
+                Access_token access_token = getAccess_token(requestManager);
                 context.setAttribute("access_token",access_token);
+                context.setAttribute("jsapi_ticket",getJsapi_ticket(requestManager,access_token));
             }
         },7200*1000,7200*1000); //延时7200秒执行，每7200秒执行一次
     }
@@ -82,5 +85,9 @@ public class Access_tokenListener implements ServletContextListener {
 
     private Access_token getAccess_token(RequestManager requestManager){
         return requestManager.getAccess_token(appid,appSecret);
+    }
+
+    private Jsapi_ticket getJsapi_ticket(RequestManager requestManager, Access_token access_token){
+        return requestManager.getJsapi_ticket(access_token);
     }
 }

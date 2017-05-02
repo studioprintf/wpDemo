@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.studioprintf.pojo.Access_token;
+import com.studioprintf.pojo.Jsapi_ticket;
 import com.studioprintf.pojo.menu.Menu;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ import java.net.URL;
 public class RequestManager {
     private final String access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
     private final String menu_create_url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
+    private final String jsApi_ticket_url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi";
 
     public String httpsGetJson(String requestUrl, String requestMethod, String outputStr) {
         String json = null;
@@ -83,6 +85,14 @@ public class RequestManager {
         Gson gson = new Gson();
         Access_token access_token = gson.fromJson(jsonToken,Access_token.class);
         return access_token;
+    }
+
+    public Jsapi_ticket getJsapi_ticket(Access_token access_token){
+            String jspapi_ticketUrl = jsApi_ticket_url.replace("ACCESS_TOKEN",access_token.getAccess_token());
+        String jsonTicket = httpsGetJson(jspapi_ticketUrl,"GET",null);
+        Gson gson = new Gson();
+        Jsapi_ticket jsapi_ticket = gson.fromJson(jsonTicket,Jsapi_ticket.class);
+        return  jsapi_ticket;
     }
 
     public int createMenu(Access_token access_token, Menu menu){
